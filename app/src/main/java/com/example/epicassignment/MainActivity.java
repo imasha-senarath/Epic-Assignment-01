@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -26,6 +28,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout;
 
+    private RecyclerView cityList;
+
+    CityAdapter cityAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +49,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Call<List<CityModel>> cityList =  ApiClient.getCityService().getCities();
-        cityList.enqueue(new Callback<List<CityModel>>() {
+        cityList = findViewById(R.id.city_list);
+
+        cityList.setLayoutManager(new LinearLayoutManager(this));
+        cityList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+
+        getCities();
+
+
+    }
+
+    public void getCities() {
+        Call<List<CityModel>> cityModelList =  ApiClient.getCityService().getCities();
+        cityModelList.enqueue(new Callback<List<CityModel>>() {
             @Override
             public void onResponse(Call<List<CityModel>> call, Response<List<CityModel>> response) {
                 if(response.isSuccessful()){
-                    Toast.makeText(MainActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+                    List<CityModel> cityModels = response.body();
+
+                    cityAdapter = new CityAdapter(MainActivity.this, cityModels);
+                    cityList.setAdapter(cityAdapter);
                 }
 
             }

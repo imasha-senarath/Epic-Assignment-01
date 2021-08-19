@@ -2,11 +2,8 @@ package com.example.epicassignment;
 
 public class CityModel {
 
-    String title, location_type, woeid, latt_long;
+    private String title, location_type, woeid, latt_long;
 
-    CityModel() {
-
-    }
 
     public CityModel(String title, String location_type, String woeid, String latt_long) {
         this.title = title;
