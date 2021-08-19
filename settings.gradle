@@ -1,0 +1,2 @@
+rootProject.name = "Epic Assignment"
+include ':app'
