@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Epic Assignment</string>
+    <string name="navigation_drawer_open"> Open Navigation Bar</string>
+    <string name="navigation_drawer_close"> Close Navigation Bar</string>
 </resources>
