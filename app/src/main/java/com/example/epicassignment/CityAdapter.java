@@ -17,11 +17,13 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
 
     private List<CityModel> mCityModelList;
     private Context mContext;
+    private String searchKeyword;
 
-    public CityAdapter(Context context, List<CityModel> cityModelList)
+    public CityAdapter(Context context, List<CityModel> cityModelList, String searchKeyword)
     {
         this.mContext = context;
         this.mCityModelList = cityModelList;
+        this.searchKeyword = searchKeyword;
     }
 
     @NotNull
@@ -38,9 +40,20 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
         String woeid = cityModel.getWoeid();
         String lattLong = cityModel.getLatt_long();
 
-        holder.title.setText(title);
-        holder.woeid.setText("WOEID: "+woeid);
-        holder.lattLang.setText("Latt Long: "+lattLong);
+        if(!searchKeyword.isEmpty()) {
+            if(title.toLowerCase().contains(searchKeyword.toLowerCase())) {
+                holder.title.setText(title);
+                holder.woeid.setText("WOEID: "+woeid);
+                holder.lattLang.setText("Latt Long: "+lattLong);
+            } else {
+                holder.itemView.setVisibility(View.GONE);
+                holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+            }
+        } else {
+            holder.title.setText(title);
+            holder.woeid.setText("WOEID: "+woeid);
+            holder.lattLang.setText("Latt Long: "+lattLong);
+        }
 
     }
 

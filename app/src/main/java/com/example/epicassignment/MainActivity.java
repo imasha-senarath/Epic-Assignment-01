@@ -11,7 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -27,6 +32,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
 
     private DrawerLayout drawerLayout;
+
+    private EditText searchBar;
+
+    private ProgressBar loadingBar;
 
     private RecyclerView cityList;
 
@@ -49,17 +58,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        loadingBar = findViewById(R.id.loading_progress_bar);
         cityList = findViewById(R.id.city_list);
+        searchBar = findViewById(R.id.home_search_bar);
 
         cityList.setLayoutManager(new LinearLayoutManager(this));
         cityList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
-        getCities();
+        getCities("");
+
+        searchBar.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String searchBarInput = searchBar.getText().toString().toLowerCase();
+                getCities(searchBarInput);
+            }
+        });
 
 
     }
 
-    public void getCities() {
+    public void getCities(String searchKeyword) {
         Call<List<CityModel>> cityModelList =  ApiClient.getCityService().getCities();
         cityModelList.enqueue(new Callback<List<CityModel>>() {
             @Override
@@ -67,8 +99,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(response.isSuccessful()){
                     List<CityModel> cityModels = response.body();
 
-                    cityAdapter = new CityAdapter(MainActivity.this, cityModels);
+                    cityAdapter = new CityAdapter(MainActivity.this, cityModels, searchKeyword);
                     cityList.setAdapter(cityAdapter);
+                    cityAdapter.notifyDataSetChanged();
+                    loadingBar.setVisibility(View.GONE);
                 }
 
             }
