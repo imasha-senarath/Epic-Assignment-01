@@ -6,26 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ProgressBar;
+
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -33,13 +25,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout;
 
-    private EditText searchBar;
-
-    private ProgressBar loadingBar;
-
-    private RecyclerView cityList;
-
-    CityAdapter cityAdapter;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
+    FragmentAdapter fragmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,61 +46,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        loadingBar = findViewById(R.id.loading_progress_bar);
-        cityList = findViewById(R.id.city_list);
-        searchBar = findViewById(R.id.home_search_bar);
 
-        cityList.setLayoutManager(new LinearLayoutManager(this));
-        cityList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        tabLayout = findViewById(R.id.tab_layout);
+        viewPager = findViewById(R.id.view_pager);
 
-        getCities("");
+        FragmentManager fm = getSupportFragmentManager();
+        fragmentAdapter = new FragmentAdapter(fm, getLifecycle());
+        viewPager.setAdapter(fragmentAdapter);
 
-        searchBar.addTextChangedListener(new TextWatcher()
-        {
+        tabLayout.addTab(tabLayout.newTab().setText("Home"));
+        tabLayout.addTab(tabLayout.newTab().setText("Chat"));
+        tabLayout.addTab(tabLayout.newTab().setText("Profile"));
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
-            {
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
+            public void onTabUnselected(TabLayout.Tab tab) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
-                String searchBarInput = searchBar.getText().toString().toLowerCase();
-                getCities(searchBarInput);
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
 
-
     }
 
-    public void getCities(String searchKeyword) {
-        Call<List<CityModel>> cityModelList =  ApiClient.getCityService().getCities();
-        cityModelList.enqueue(new Callback<List<CityModel>>() {
-            @Override
-            public void onResponse(Call<List<CityModel>> call, Response<List<CityModel>> response) {
-                if(response.isSuccessful()){
-                    List<CityModel> cityModels = response.body();
-
-                    cityAdapter = new CityAdapter(MainActivity.this, cityModels, searchKeyword);
-                    cityList.setAdapter(cityAdapter);
-                    cityAdapter.notifyDataSetChanged();
-                    loadingBar.setVisibility(View.GONE);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<CityModel>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     @Override
     public void onBackPressed() {
