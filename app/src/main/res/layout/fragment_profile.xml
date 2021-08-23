@@ -6,4 +6,49 @@
     tools:context=".ProfileFragment">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20px">
+
+            <ImageView
+                android:id="@+id/text_scanner_img"
+                android:layout_width="match_parent"
+                android:layout_height="500px"
+                android:background="@drawable/input_style"/>
+
+            <TextView
+                android:id="@+id/text_scanner_output"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="..."
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"/>
+
+            <Button
+                android:id="@+id/text_scanner_img_cap_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Capture Image"
+                android:background="@drawable/button_style"
+                android:textColor="@color/white"/>
+
+            <Button
+                android:id="@+id/text_scanner_detect_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Detect Text"
+                android:background="@drawable/button_style"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>
