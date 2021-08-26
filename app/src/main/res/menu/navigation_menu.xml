@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/bottom_nav_item_one"
-        android:title="Item 01" />
+        android:id="@+id/bottom_nav_data_binding"
+        android:title="Data Binding" />
 
     <item
         android:id="@+id/bottom_nav_item_two"

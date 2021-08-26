@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.MenuItem;
@@ -97,8 +98,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.bottom_nav_item_one:
-                Toast.makeText(this, "Item One", Toast.LENGTH_SHORT).show();
+            case R.id.bottom_nav_data_binding:
+                Intent intent = new Intent(MainActivity.this, DataBindingActivity.class);
+                startActivity(intent);
                 break;
             case R.id.bottom_nav_item_two:
                 Toast.makeText(this, "Item Two", Toast.LENGTH_SHORT).show();
