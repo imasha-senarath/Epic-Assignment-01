@@ -102,8 +102,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(MainActivity.this, DataBindingActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.bottom_nav_item_two:
-                Toast.makeText(this, "Item Two", Toast.LENGTH_SHORT).show();
+            case R.id.bottom_nav_room_database:
+                Intent intent2 = new Intent(MainActivity.this, RoomDatabaseActivity.class);
+                startActivity(intent2);
                 break;
 
         }

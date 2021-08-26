@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EpicAssignment">
-        <activity android:name=".DataBindingActivity"></activity>
+        <activity android:name=".RoomDatabaseActivity"></activity>
+        <activity android:name=".DataBindingActivity" />
         <activity android:name=".MainActivity">
             <meta-data
                 android:name="com.google.firebase.ml.vision.DEPENDENCIES"
